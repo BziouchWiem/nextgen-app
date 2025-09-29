@@ -1,59 +1,96 @@
+// app/(tabs)/_layout.tsx
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Tabs } from 'expo-router';
+import { Image, StyleSheet } from 'react-native';
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+// Un composant simple pour gérer l'affichage de l'icône
+const TabBarIcon = ({ source, focused }: { source: any, focused: boolean }) => (
+  <Image
+    source={source}
+    style={[styles.icon, { tintColor: focused ? '#002E52' : '#9CA3AF' }]}
+    resizeMode="contain"
+  />
+);
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        headerShown: false,
+        tabBarActiveTintColor: '#002E52',
+        tabBarInactiveTintColor: '#9CA3AF',
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          borderTopWidth: 0,
+          height: 90,
+          paddingTop: 10,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+          marginTop: 4,
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: 'Accueil',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              // CHEMIN CORRIGÉ : 'images' au lieu de 'icons'
+              source={focused ? require('../../assets/images/Accueil-fill.png') : require('../../assets/images/Accueil.png')}
+              focused={focused}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="assistants"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Assistants',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              // CHEMIN CORRIGÉ
+              source={focused ? require('../../assets/images/Workspace-fill.png') : require('../../assets/images/Workspace.png')}
+              focused={focused}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="pomodoro"
+        options={{
+          title: 'Pomodoro',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              // CHEMIN CORRIGÉ
+              source={focused ? require('../../assets/images/Pomodoro-fill.png') : require('../../assets/images/Pomodoro.png')}
+              focused={focused}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profil"
+        options={{
+          title: 'Profil',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              // CHEMIN CORRIGÉ
+              source={focused ? require('../../assets/images/Profil-fill.png') : require('../../assets/images/Profil.png')}
+              focused={focused}
+            />
+          ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  icon: {
+    width: 30,
+    height: 30,
+  },
+});
