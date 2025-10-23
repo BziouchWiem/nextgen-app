@@ -1,15 +1,42 @@
 // app/(tabs)/_layout.tsx
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
-// Un composant simple pour gérer l'affichage de l'icône
-const TabBarIcon = ({ source, focused }: { source: any, focused: boolean }) => (
-  <Image
-    source={source}
-    style={[styles.icon, { tintColor: focused ? '#002E52' : '#9CA3AF' }]}
-    resizeMode="contain"
-  />
+// Import SVG icons (both filled and outline versions)
+import AccueilFillSvg from '../../assets/images/Accueil-fill.svg';
+import AccueilSvg from '../../assets/images/Accueil.svg';
+import WorkspaceFillSvg from '../../assets/images/Workspace-fill.svg';
+import WorkspaceSvg from '../../assets/images/Workspace.svg';
+import PomodoroFillSvg from '../../assets/images/Pomodoro-fill.svg';
+import PomodoroSvg from '../../assets/images/Pomodoro.svg';
+import ProfilFillSvg from '../../assets/images/Profil-fill.svg';
+import ProfilSvg from '../../assets/images/Profil.svg';
+
+// Un composant pour gérer l'affichage des icônes SVG
+const TabBarIcon = ({ 
+  SvgIconFilled, 
+  SvgIconOutline, 
+  focused 
+}: { 
+  SvgIconFilled?: React.ComponentType<any>;
+  SvgIconOutline?: React.ComponentType<any>;
+  focused: boolean;
+}) => (
+  <View style={styles.iconContainer}>
+    {focused && SvgIconFilled ? (
+      <SvgIconFilled 
+        width={30} 
+        height={30}
+      />
+    ) : SvgIconOutline ? (
+      <SvgIconOutline 
+        width={30} 
+        height={30} 
+        fill="#9CA3AF"
+      />
+    ) : null}
+  </View>
 );
 
 export default function TabsLayout() {
@@ -20,10 +47,21 @@ export default function TabsLayout() {
         tabBarActiveTintColor: '#002E52',
         tabBarInactiveTintColor: '#9CA3AF',
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#E5E7EB', // light gray like wireframe
           borderTopWidth: 0,
           height: 90,
           paddingTop: 10,
+          borderTopLeftRadius: 28,
+          borderTopRightRadius: 28,
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          elevation: 6,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.06,
+          shadowRadius: 8,
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -38,8 +76,8 @@ export default function TabsLayout() {
           title: 'Accueil',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
-              // CHEMIN CORRIGÉ : 'images' au lieu de 'icons'
-              source={focused ? require('../../assets/images/Accueil-fill.png') : require('../../assets/images/Accueil.png')}
+              SvgIconFilled={AccueilFillSvg}
+              SvgIconOutline={AccueilSvg}
               focused={focused}
             />
           ),
@@ -51,8 +89,8 @@ export default function TabsLayout() {
           title: 'Assistants',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
-              // CHEMIN CORRIGÉ
-              source={focused ? require('../../assets/images/Workspace-fill.png') : require('../../assets/images/Workspace.png')}
+              SvgIconFilled={WorkspaceFillSvg}
+              SvgIconOutline={WorkspaceSvg}
               focused={focused}
             />
           ),
@@ -64,8 +102,8 @@ export default function TabsLayout() {
           title: 'Pomodoro',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
-              // CHEMIN CORRIGÉ
-              source={focused ? require('../../assets/images/Pomodoro-fill.png') : require('../../assets/images/Pomodoro.png')}
+              SvgIconFilled={PomodoroFillSvg}
+              SvgIconOutline={PomodoroSvg}
               focused={focused}
             />
           ),
@@ -77,8 +115,8 @@ export default function TabsLayout() {
           title: 'Profil',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon
-              // CHEMIN CORRIGÉ
-              source={focused ? require('../../assets/images/Profil-fill.png') : require('../../assets/images/Profil.png')}
+              SvgIconFilled={ProfilFillSvg}
+              SvgIconOutline={ProfilSvg}
               focused={focused}
             />
           ),
@@ -92,5 +130,11 @@ const styles = StyleSheet.create({
   icon: {
     width: 30,
     height: 30,
+  },
+  iconContainer: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
