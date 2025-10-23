@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import Svg, { Circle } from 'react-native-svg'; // Importez Svg et Circle
 
 type Props = {
-  iconSource: any;
+  iconSource: any; // Can be PNG require() or SVG component
   title: string;
   value: string;
   progressType: 'circle' | 'bar';
@@ -30,7 +30,11 @@ export default function StatCard({
   return (
     <View style={[styles.card, { backgroundColor: color }]}>
       <View style={styles.header}>
-        <Image source={iconSource} style={styles.icon} />
+        {typeof iconSource === 'function' ? (
+          React.createElement(iconSource, { width: 24, height: 24, fill: "#002E52" })
+        ) : (
+          <Image source={iconSource} style={styles.icon} />
+        )}
         <Text style={styles.title}>{title}</Text>
       </View>
 
@@ -77,7 +81,20 @@ export default function StatCard({
 }
 
 const styles = StyleSheet.create({
-  card: { flex: 1, padding: 16, borderRadius: 20, justifyContent: 'space-between' },
+  card: { 
+    flex: 1, 
+    padding: 16, 
+    borderRadius: 20, 
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
   header: { flexDirection: 'row', alignItems: 'center' },
   icon: { width: 24, height: 24 },
   title: { marginLeft: 8, fontSize: 16, fontWeight: '600', color: '#002E52' },
